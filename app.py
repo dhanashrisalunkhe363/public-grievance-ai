@@ -8,6 +8,7 @@ import csv
 import io
 from email.message import EmailMessage
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from functools import wraps
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -28,8 +29,7 @@ classes = None
 
 
 def now():
-    return datetime.now().strftime("%d-%m-%Y %H:%M")
-
+    return datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%d-%m-%Y %H:%M")
 
 def db():
     conn = sqlite3.connect(DB)
