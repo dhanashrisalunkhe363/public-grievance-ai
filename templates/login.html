@@ -1,0 +1,531 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .login-page {
+        min-height: calc(100vh - 80px);
+        padding: 60px 6%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(99,102,241,.12), transparent 30%),
+            radial-gradient(circle at 85% 80%, rgba(14,165,233,.10), transparent 30%),
+            #f7f9fc;
+    }
+
+    /* Background decorative circles */
+    .login-page::before {
+        content: "";
+        position: absolute;
+        width: 380px;
+        height: 380px;
+        border: 1px solid rgba(79,70,229,.08);
+        border-radius: 50%;
+        top: -170px;
+        left: -130px;
+    }
+
+    .login-page::after {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border: 1px solid rgba(37,99,235,.08);
+        border-radius: 50%;
+        bottom: -130px;
+        right: -100px;
+    }
+
+    /* Main container */
+    .login-container {
+        width: 100%;
+        max-width: 1000px;
+        min-height: 570px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(15,23,42,.10);
+        border: 1px solid #e5e7eb;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* LEFT SIDE */
+    .login-info {
+        padding: 55px;
+        color: white;
+        background:
+            radial-gradient(circle at 80% 20%, rgba(129,140,248,.22), transparent 28%),
+            linear-gradient(145deg, #111827, #172554 55%, #312e81);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .login-info::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 50%;
+        right: -120px;
+        top: -80px;
+    }
+
+    .login-info::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 50%;
+        left: -130px;
+        bottom: -100px;
+    }
+
+    .brand-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #6366f1, #2563eb);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        font-weight: 800;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(99,102,241,.3);
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-info small {
+        color: #a5b4fc;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.7px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-info h2 {
+        font-size: 36px;
+        line-height: 1.15;
+        margin: 12px 0 18px;
+        letter-spacing: -.8px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-info h2 span {
+        background: linear-gradient(90deg, #93c5fd, #c4b5fd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .login-info p {
+        color: #cbd5e1;
+        font-size: 15px;
+        line-height: 1.7;
+        max-width: 390px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-points {
+        margin-top: 25px;
+        display: grid;
+        gap: 13px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-point {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #e2e8f0;
+        font-size: 13px;
+    }
+
+    .point-icon {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.10);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #a5b4fc;
+        font-size: 12px;
+    }
+
+    /* RIGHT SIDE */
+    .login-form-area {
+        padding: 55px 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-heading small {
+        color: #4f46e5;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .form-heading h1 {
+        margin: 8px 0 8px;
+        font-size: 34px;
+        letter-spacing: -.8px;
+        color: #111827;
+    }
+
+    .form-heading p {
+        color: #64748b;
+        font-size: 14px;
+        margin: 0 0 30px;
+    }
+
+    /* FORM */
+    .login-form {
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 19px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    .login-form input {
+        width: 100%;
+        height: 48px;
+        padding: 0 14px 0 42px;
+        border: 1px solid #dbe1ea;
+        border-radius: 10px;
+        outline: none;
+        background: #f8fafc;
+        color: #172033;
+        font-size: 14px;
+        transition: .25s ease;
+    }
+
+    .login-form input::placeholder {
+        color: #94a3b8;
+    }
+
+    .login-form input:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(99,102,241,.10);
+    }
+
+    /* LOGIN BUTTON */
+    .login-button {
+        width: 100%;
+        height: 49px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4f46e5, #2563eb);
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .25s ease;
+        box-shadow: 0 8px 20px rgba(79,70,229,.20);
+    }
+
+    .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(79,70,229,.28);
+    }
+
+    /* ADMIN INFO */
+    .admin-hint {
+        margin-top: 22px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .admin-hint strong {
+        color: #334155;
+    }
+
+    .admin-title {
+        display: block;
+        color: #4f46e5;
+        font-weight: 800;
+        font-size: 11px;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+
+    /* REGISTER */
+    .register-text {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    .register-text a {
+        color: #4f46e5;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .register-text a:hover {
+        text-decoration: underline;
+    }
+
+    /* SECURITY */
+    .security-note {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 11px;
+        color: #94a3b8;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 850px) {
+
+        .login-container {
+            grid-template-columns: 1fr;
+            max-width: 520px;
+        }
+
+        .login-info {
+            padding: 40px;
+        }
+
+        .login-info h2 {
+            font-size: 30px;
+        }
+
+        .login-points {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .login-form-area {
+            padding: 45px 40px;
+        }
+    }
+
+    @media (max-width: 550px) {
+
+        .login-page {
+            padding: 30px 15px;
+        }
+
+        .login-info {
+            padding: 32px 25px;
+        }
+
+        .login-form-area {
+            padding: 35px 25px;
+        }
+
+        .login-points {
+            grid-template-columns: 1fr;
+        }
+
+        .form-heading h1 {
+            font-size: 29px;
+        }
+
+        .login-info h2 {
+            font-size: 28px;
+        }
+    }
+</style>
+
+<section class="login-page">
+
+```
+<div class="login-container">
+
+    <!-- ================= LEFT INFORMATION ================= -->
+
+    <div class="login-info">
+
+        <div class="brand-icon">
+            AI
+        </div>
+
+        <small>PUBLIC GRIEVANCE PLATFORM</small>
+
+        <h2>
+            Welcome back to your
+            <span>smart civic platform.</span>
+        </h2>
+
+        <p>
+            Access your grievance dashboard, track complaint progress
+            and stay informed about important updates.
+        </p>
+
+        <div class="login-points">
+
+            <div class="login-point">
+                <span class="point-icon">✓</span>
+                AI-powered complaint analysis
+            </div>
+
+            <div class="login-point">
+                <span class="point-icon">✓</span>
+                Real-time complaint tracking
+            </div>
+
+            <div class="login-point">
+                <span class="point-icon">✓</span>
+                Secure user account
+            </div>
+
+            <div class="login-point">
+                <span class="point-icon">✓</span>
+                Complaint status notifications
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= LOGIN FORM ================= -->
+
+    <div class="login-form-area">
+
+        <div class="form-heading">
+
+            <small>ACCOUNT ACCESS</small>
+
+            <h1>Login</h1>
+
+            <p>
+                Sign in to continue to your grievance dashboard.
+            </p>
+
+        </div>
+
+
+        <form method="post" class="login-form">
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">✉</span>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">●</span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button type="submit" class="login-button">
+                Login to Dashboard →
+            </button>
+
+        </form>
+
+
+        
+
+
+        <!-- REGISTER -->
+
+        <div class="register-text">
+
+            Don't have an account?
+            <a href="/register">Create an account</a>
+
+        </div>
+
+
+        <div class="security-note">
+            🔒 Your account information is securely handled.
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+{% endblock %}

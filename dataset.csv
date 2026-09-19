@@ -1,0 +1,16 @@
+text,sentiment
+Water supply is unavailable for five days,Negative
+There is no drinking water in our area,Negative
+The water pipeline is leaking,Negative
+Road is broken and full of potholes,Negative
+Electricity is not available since yesterday,Negative
+The hospital does not have medicines,Negative
+Garbage is not collected in our locality,Negative
+The school has excellent facilities,Positive
+Thank you for solving our water problem,Positive
+Electricity service is available now,Positive
+The road repair work is good,Positive
+The area is clean and beautiful,Positive
+I want information about water supply,Neutral
+Please provide details about road repair,Neutral
+I need information about electricity connection,Neutral

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head">
+    <div>
+        <small>COMPLAINT TRACKING</small>
+        <h1>Complaint #{{ complaint.id }} Timeline</h1>
+        <p>{{ complaint.complaint }}</p>
+    </div>
+    <a class="btn outline" href="{{ '/dashboard' if role == 'user' else '/admin' }}">← Back</a>
+</div>
+
+<section class="panel">
+    <div class="timeline">
+        {% for h in history %}
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div>
+                <span class="tag {{ h.status|lower|replace(' ','-') }}">{{ h.status }}</span>
+                <h3>{{ h.remark or 'Status updated.' }}</h3>
+                <small>{{ h.changed_at }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

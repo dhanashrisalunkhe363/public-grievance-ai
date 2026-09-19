@@ -1,0 +1,347 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .contact-page {
+        padding: 10px 0 60px;
+    }
+
+    /* Header */
+    .contact-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .contact-head small {
+        color: #6366f1;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .contact-head h1 {
+        margin: 7px 0;
+        color: #111827;
+        font-size: 38px;
+        line-height: 1.1;
+    }
+
+    .contact-head p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 10px;
+        border: 0;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+        box-shadow: 0 7px 18px rgba(79,70,229,.18);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(79,70,229,.25);
+    }
+
+    .btn.outline {
+        background: white;
+        color: #4f46e5 !important;
+        border: 1px solid #c7d2fe;
+        box-shadow: none;
+    }
+
+    .btn.mini {
+        padding: 8px 11px;
+        font-size: 11px;
+        border-radius: 8px;
+    }
+
+    /* Main Panel */
+    .message-panel {
+        background: rgba(255,255,255,.97);
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(15,23,42,.06);
+    }
+
+    .panel-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 21px 24px;
+        border-bottom: 1px solid #eef2f7;
+        background: #fafbff;
+    }
+
+    .panel-top strong {
+        color: #172033;
+        font-size: 15px;
+    }
+
+    .panel-top span {
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    /* Table */
+    .table {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+    }
+
+    th {
+        padding: 14px 16px;
+        background: #f8fafc;
+        color: #64748b;
+        text-align: left;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 16px;
+        border-top: 1px solid #eef2f7;
+        color: #334155;
+        font-size: 13px;
+        vertical-align: top;
+    }
+
+    tr:hover td {
+        background: #fafbff;
+    }
+
+    td strong {
+        color: #1e293b;
+    }
+
+    /* Message column */
+    .message-text {
+        max-width: 360px;
+        line-height: 1.6;
+        color: #475569;
+    }
+
+    /* Status Tags */
+    .tag {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .tag.read {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+    }
+
+    .tag.unread {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+    }
+
+    /* ID */
+    .message-id {
+        color: #4f46e5;
+        font-weight: 800;
+    }
+
+    /* Action */
+    .read-form {
+        margin: 0;
+    }
+
+    .read-label {
+        color: #059669;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+        .contact-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .contact-head h1 {
+            font-size: 30px;
+        }
+
+        .contact-head .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="contact-page">
+
+    <!-- HEADER -->
+    <div class="contact-head">
+
+        <div>
+            <small>INBOX</small>
+
+            <h1>Contact Messages</h1>
+
+            <p>
+                Messages received from citizens through the public contact page.
+            </p>
+        </div>
+
+        <a class="btn outline" href="/admin">
+            ← Admin Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- MESSAGE PANEL -->
+    <section class="message-panel">
+
+        <div class="panel-top">
+            <strong>Citizen Messages</strong>
+
+            <span>
+                Review and manage incoming messages
+            </span>
+        </div>
+
+
+        <div class="table">
+
+            <table>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Received</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+
+                {% for m in messages %}
+
+                <tr>
+
+                    <td>
+                        <span class="message-id">
+                            #{{ m.id }}
+                        </span>
+                    </td>
+
+
+                    <td>
+                        <strong>
+                            {{ m.name }}
+                        </strong>
+                    </td>
+
+
+                    <td>
+                        {{ m.email }}
+                    </td>
+
+
+                    <td>
+                        <div class="message-text">
+                            {{ m.message }}
+                        </div>
+                    </td>
+
+
+                    <td>
+                        {{ m.created_at }}
+                    </td>
+
+
+                    <td>
+
+                        <span class="tag {{ m.status|lower }}">
+                            {{ m.status }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if m.status != 'Read' %}
+
+                        <form
+                            class="read-form"
+                            method="post"
+                            action="/admin/contacts/{{ m.id }}/read"
+                        >
+
+                            <button class="btn mini" type="submit">
+                                Mark Read
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        <span class="read-label">
+                            ✓ Read
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                {% else %}
+
+                <tr>
+                    <td colspan="7">
+                        No contact messages found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+

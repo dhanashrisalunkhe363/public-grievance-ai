@@ -1,0 +1,681 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .citizen-page {
+        padding: 10px 0 60px;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+    .citizen-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .citizen-head small {
+        color: #6366f1;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .citizen-head h1 {
+        margin: 7px 0;
+        color: #111827;
+        font-size: 38px;
+        line-height: 1.15;
+    }
+
+    .citizen-head p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================== */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 10px;
+        border: 0;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+        box-shadow: 0 7px 18px rgba(79, 70, 229, .18);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(79, 70, 229, .25);
+    }
+
+    .btn.outline {
+        background: white;
+        color: #4f46e5 !important;
+        border: 1px solid #c7d2fe;
+        box-shadow: none;
+    }
+
+    .btn.mini {
+        padding: 8px 11px;
+        border-radius: 8px;
+        font-size: 11px;
+    }
+
+    /* =========================
+       STATISTICS
+    ========================== */
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+
+    .stat {
+        position: relative;
+        overflow: hidden;
+        padding: 22px;
+        border-radius: 17px;
+        background: rgba(255,255,255,.96);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(15,23,42,.06);
+        transition: .2s ease;
+    }
+
+    .stat:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(15,23,42,.09);
+    }
+
+    .stat::after {
+        content: "";
+        position: absolute;
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        background: #eef2ff;
+        right: -25px;
+        top: -25px;
+    }
+
+    .stat span {
+        display: block;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .stat strong {
+        display: block;
+        color: #111827;
+        font-size: 31px;
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+    .stat small {
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    /* =========================
+       PANELS
+    ========================== */
+    .panel {
+        margin-bottom: 24px;
+        background: rgba(255,255,255,.97);
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(15,23,42,.06);
+    }
+
+    .section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 23px 24px 18px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .section-head small {
+        color: #6366f1;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .section-head h2 {
+        margin: 5px 0 0;
+        color: #172033;
+        font-size: 22px;
+    }
+
+    /* =========================
+       TABLE
+    ========================== */
+    .table {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        min-width: 1050px;
+        border-collapse: collapse;
+    }
+
+    th {
+        padding: 14px 15px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 10px;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 15px;
+        border-top: 1px solid #eef2f7;
+        color: #334155;
+        font-size: 13px;
+        vertical-align: top;
+    }
+
+    tr:hover td {
+        background: #fafbff;
+    }
+
+    td small {
+        color: #94a3b8;
+    }
+
+    /* =========================
+       TAGS
+    ========================== */
+    .tag {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 800;
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+
+    .tag.high {
+        background: #fff1f2;
+        color: #e11d48;
+        border-color: #fecdd3;
+    }
+
+    .tag.medium {
+        background: #fff7ed;
+        color: #ea580c;
+        border-color: #fed7aa;
+    }
+
+    .tag.low {
+        background: #f0fdf4;
+        color: #16a34a;
+        border-color: #bbf7d0;
+    }
+
+    .tag.pending {
+        background: #eff6ff;
+        color: #2563eb;
+        border-color: #bfdbfe;
+    }
+
+    .tag.under-review {
+        background: #f5f3ff;
+        color: #7c3aed;
+        border-color: #ddd6fe;
+    }
+
+    .tag.in-progress {
+        background: #ecfeff;
+        color: #0891b2;
+        border-color: #a5f3fc;
+    }
+
+    .tag.resolved {
+        background: #ecfdf5;
+        color: #059669;
+        border-color: #a7f3d0;
+    }
+
+    .tag.rejected {
+        background: #fef2f2;
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+
+    .tag.negative {
+        background: #fef2f2;
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+
+    .tag.positive {
+        background: #ecfdf5;
+        color: #059669;
+        border-color: #a7f3d0;
+    }
+
+    .tag.neutral {
+        background: #f1f5f9;
+        color: #64748b;
+        border-color: #cbd5e1;
+    }
+
+    /* =========================
+       FEEDBACK
+    ========================== */
+    .feedback-form {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        margin-top: 8px;
+        min-width: 160px;
+    }
+
+    .feedback-form input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 9px 10px;
+        border: 1px solid #dbe3ef;
+        border-radius: 8px;
+        background: #f8fafc;
+        color: #334155;
+        font-family: inherit;
+        font-size: 11px;
+        outline: none;
+    }
+
+    .feedback-form input:focus {
+        background: white;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99,102,241,.10);
+    }
+
+    /* =========================
+       NOTIFICATIONS
+    ========================== */
+    .notice {
+        position: relative;
+        margin: 14px 24px;
+        padding: 16px 18px;
+        border-radius: 13px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: .2s ease;
+    }
+
+    .notice:hover {
+        background: #fafbff;
+        border-color: #c7d2fe;
+    }
+
+    .notice:first-child {
+        margin-top: 20px;
+    }
+
+    .notice:last-child {
+        margin-bottom: 22px;
+    }
+
+    .notice strong {
+        color: #1e293b;
+        font-size: 14px;
+    }
+
+    .notice p {
+        margin: 6px 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .notice small {
+        color: #94a3b8;
+        font-size: 10px;
+    }
+
+    .empty-message {
+        padding: 25px 24px;
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+    @media (max-width: 1000px) {
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 720px) {
+
+        .citizen-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .citizen-head h1 {
+            font-size: 30px;
+        }
+
+        .citizen-head .btn {
+            width: 100%;
+        }
+
+        .section-head {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .stat {
+            padding: 19px;
+        }
+
+        .section-head {
+            padding: 20px;
+        }
+
+        .notice {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+    }
+</style>
+
+
+<div class="citizen-page">
+
+    <!-- =========================
+         DASHBOARD HEADER
+    ========================== -->
+    <div class="citizen-head">
+
+        <div>
+            <small>CITIZEN PORTAL</small>
+
+            <h1>
+                Welcome, {{ current_user }} 👋
+            </h1>
+
+            <p>
+                Submit grievances and track every official status update.
+            </p>
+        </div>
+
+        <a class="btn" href="/complaint">
+            ＋ Submit Complaint
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+    <div class="stats">
+
+        <div class="stat">
+            <span>Total Complaints</span>
+            <strong>{{ stats.total }}</strong>
+            <small>All submissions</small>
+        </div>
+
+        <div class="stat">
+            <span>Active Cases</span>
+            <strong>{{ stats.active }}</strong>
+            <small>Currently being processed</small>
+        </div>
+
+        <div class="stat">
+            <span>Resolved</span>
+            <strong>{{ stats.resolved }}</strong>
+            <small>Completed cases</small>
+        </div>
+
+        <div class="stat">
+            <span>High Priority</span>
+            <strong>{{ stats.high }}</strong>
+            <small>Urgent attention</small>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MY COMPLAINTS
+    ========================== -->
+    <section class="panel">
+
+        <div class="section-head">
+
+            <div>
+                <small>TRACKING</small>
+
+                <h2>
+                    My Complaints
+                </h2>
+            </div>
+
+        </div>
+
+
+        <div class="table">
+
+            <table>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Complaint</th>
+                    <th>AI Analysis</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Remark</th>
+                    <th>Last Update</th>
+                    <th>Action</th>
+                </tr>
+
+
+                {% for r in rows %}
+
+                <tr>
+
+                    <td>
+                        #{{ r.id }}
+                    </td>
+
+
+                    <td>
+                        {{ r.complaint }}
+                    </td>
+
+
+                    <td>
+
+                        <span class="tag {{ r.sentiment|lower }}">
+                            {{ r.sentiment }}
+                        </span>
+
+                        <br>
+
+                        {{ r.category }}
+
+                        <br>
+
+                        <small>
+                            Confidence: {{ r.confidence }}%
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="tag {{ r.priority|lower }}">
+                            {{ r.priority }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="tag {{ r.status|lower|replace(' ','-') }}">
+                            {{ r.status }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ r.admin_remark or 'No update yet' }}
+                    </td>
+
+
+                    <td>
+                        {{ r.updated_at or r.created_at }}
+                    </td>
+
+
+                    <td>
+
+                        <a href="/complaint/{{ r.id }}/history">
+                            Track Timeline
+                        </a>
+
+
+                        {% if r.status == 'Resolved' %}
+
+                        <form
+                            class="feedback-form"
+                            method="post"
+                            action="/complaint/{{ r.id }}/feedback"
+                        >
+
+                            <input
+                                name="feedback"
+                                value="{{ r.feedback or '' }}"
+                                placeholder="Your feedback"
+                            >
+
+                            <button class="btn mini" type="submit">
+                                Save
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+                {% else %}
+
+                <tr>
+                    <td colspan="8">
+                        No complaints yet.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         NOTIFICATIONS
+    ========================== -->
+    <section class="panel">
+
+        <div class="section-head">
+
+            <div>
+                <small>ALERT CENTER</small>
+
+                <h2>
+                    Recent Notifications
+                </h2>
+            </div>
+
+
+            <a class="btn mini outline" href="/notifications">
+                View All
+            </a>
+
+        </div>
+
+
+        {% for n in notifications %}
+
+        <div class="notice">
+
+            <strong>
+                {{ n.title }}
+            </strong>
+
+            <p>
+                {{ n.message }}
+            </p>
+
+            <small>
+                {{ n.created_at }}
+            </small>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+            No notifications yet.
+        </div>
+
+        {% endfor %}
+
+    </section>
+
+</div>
+
+{% endblock %}
+

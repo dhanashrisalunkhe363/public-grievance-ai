@@ -1,0 +1,839 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", Arial, sans-serif;
+        background: #f7f9fc;
+        color: #172033;
+    }
+
+    /* ================= ABOUT HERO ================= */
+
+    .about-hero {
+        min-height: 430px;
+        padding: 70px 8%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 50px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+
+        background:
+            radial-gradient(circle at 85% 25%,
+                rgba(99,102,241,.22),
+                transparent 28%),
+            radial-gradient(circle at 15% 80%,
+                rgba(14,165,233,.12),
+                transparent 30%),
+            linear-gradient(135deg,
+                #111827 0%,
+                #172554 55%,
+                #312e81 100%);
+    }
+
+    .about-hero::before {
+        content: "";
+        position: absolute;
+        width: 360px;
+        height: 360px;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 50%;
+        right: 8%;
+        top: -120px;
+    }
+
+    .about-hero::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border: 1px solid rgba(255,255,255,.07);
+        border-radius: 50%;
+        left: -120px;
+        bottom: -120px;
+    }
+
+    .about-hero-content {
+        max-width: 760px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .about-label {
+        display: inline-block;
+        color: #a5b4fc;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.7px;
+        margin-bottom: 18px;
+    }
+
+    .about-hero h1 {
+        margin: 0 0 20px;
+        font-size: clamp(40px, 5vw, 60px);
+        line-height: 1.1;
+        letter-spacing: -1.8px;
+    }
+
+    .about-hero h1 span {
+        background: linear-gradient(90deg, #93c5fd, #c4b5fd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .about-hero p {
+        max-width: 720px;
+        color: #cbd5e1;
+        font-size: 17px;
+        line-height: 1.75;
+        margin: 0;
+    }
+
+    /* AI BADGE */
+
+    .about-badge {
+        width: 190px;
+        height: 190px;
+        border-radius: 45px;
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        font-size: 48px;
+        font-weight: 800;
+
+        background:
+            linear-gradient(145deg,
+                rgba(99,102,241,.95),
+                rgba(37,99,235,.95));
+
+        box-shadow:
+            0 0 60px rgba(99,102,241,.35),
+            inset 0 0 30px rgba(255,255,255,.12);
+
+        position: relative;
+        z-index: 2;
+    }
+
+    .about-badge small {
+        color: #dbeafe;
+        font-size: 13px;
+        letter-spacing: 2px;
+        margin-top: 5px;
+    }
+
+    /* ================= MAIN CONTENT ================= */
+
+    .about-content {
+        max-width: 1150px;
+        margin: auto;
+        padding: 75px 30px;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .section-heading small {
+        color: #4f46e5;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .section-heading h2 {
+        font-size: 38px;
+        margin: 10px 0 12px;
+        letter-spacing: -.8px;
+        color: #111827;
+    }
+
+    .section-heading p {
+        max-width: 750px;
+        margin: auto;
+        color: #64748b;
+        line-height: 1.7;
+    }
+
+    /* ================= MISSION ================= */
+
+    .mission {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 38px;
+        margin-bottom: 65px;
+        box-shadow: 0 10px 30px rgba(15,23,42,.04);
+    }
+
+    .mission-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .mission-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 13px;
+        background: #eef2ff;
+        color: #4f46e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .mission h2 {
+        margin: 0;
+        font-size: 27px;
+    }
+
+    .mission p {
+        margin: 0;
+        color: #64748b;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+
+    /* ================= ABOUT CARDS ================= */
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        margin-bottom: 75px;
+    }
+
+    .about-card {
+        background: white;
+        padding: 30px;
+        border-radius: 18px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 8px 25px rgba(15,23,42,.04);
+        transition: .3s ease;
+    }
+
+    .about-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 40px rgba(15,23,42,.09);
+        border-color: #c7d2fe;
+    }
+
+    .card-number {
+        color: #4f46e5;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .about-card h3 {
+        margin: 15px 0 10px;
+        font-size: 19px;
+        color: #111827;
+    }
+
+    .about-card p {
+        margin: 0;
+        color: #64748b;
+        line-height: 1.7;
+        font-size: 14px;
+    }
+
+    /* ================= WORKFLOW ================= */
+
+    .workflow-section {
+        background: #f1f5f9;
+        margin-left: -30px;
+        margin-right: -30px;
+        padding: 70px 30px;
+    }
+
+    .workflow {
+        max-width: 1000px;
+        margin: 45px auto 0;
+        display: grid;
+        gap: 16px;
+    }
+
+    .workflow-step {
+        display: grid;
+        grid-template-columns: 65px 1fr;
+        gap: 20px;
+        align-items: center;
+
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 20px 25px;
+
+        transition: .25s ease;
+    }
+
+    .workflow-step:hover {
+        transform: translateX(5px);
+        border-color: #c7d2fe;
+        box-shadow: 0 10px 25px rgba(15,23,42,.06);
+    }
+
+    .workflow-number {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #eef2ff;
+        color: #4f46e5;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: 800;
+        font-size: 15px;
+    }
+
+    .workflow-step h3 {
+        margin: 0 0 5px;
+        font-size: 17px;
+        color: #111827;
+    }
+
+    .workflow-step p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* ================= TECHNOLOGY ================= */
+
+    .technology {
+        margin-top: 70px;
+        padding: 40px;
+        border-radius: 22px;
+
+        background:
+            radial-gradient(circle at 90% 20%,
+                rgba(129,140,248,.20),
+                transparent 30%),
+            linear-gradient(135deg,
+                #111827,
+                #312e81);
+
+        color: white;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 45px;
+        align-items: center;
+    }
+
+    .technology small {
+        color: #a5b4fc;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .technology h2 {
+        font-size: 30px;
+        margin: 10px 0 14px;
+    }
+
+    .technology p {
+        color: #cbd5e1;
+        line-height: 1.7;
+        font-size: 14px;
+    }
+
+    .tech-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .tech-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 15px;
+        border-radius: 10px;
+        background: rgba(255,255,255,.07);
+        border: 1px solid rgba(255,255,255,.10);
+        color: #e2e8f0;
+        font-size: 13px;
+    }
+
+    .tech-icon {
+        color: #a5b4fc;
+        font-weight: 800;
+    }
+
+    /* ================= CTA ================= */
+
+    .about-cta {
+        margin-top: 70px;
+        padding: 45px 30px;
+        text-align: center;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+    }
+
+    .about-cta h2 {
+        margin: 0 0 10px;
+        font-size: 30px;
+        color: #111827;
+    }
+
+    .about-cta p {
+        color: #64748b;
+        margin: 0 0 22px;
+    }
+
+    .about-cta a {
+        display: inline-block;
+        padding: 13px 24px;
+        border-radius: 9px;
+        background: #4f46e5;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        transition: .25s;
+    }
+
+    .about-cta a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(79,70,229,.25);
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 850px) {
+
+        .about-hero {
+            padding: 60px 6%;
+        }
+
+        .about-badge {
+            display: none;
+        }
+
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .technology {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+
+        .about-hero {
+            padding: 50px 6%;
+        }
+
+        .about-hero h1 {
+            font-size: 39px;
+        }
+
+        .about-hero p {
+            font-size: 15px;
+        }
+
+        .about-content {
+            padding: 55px 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 30px;
+        }
+
+        .mission {
+            padding: 25px;
+        }
+
+        .workflow-section {
+            margin-left: -20px;
+            margin-right: -20px;
+            padding: 55px 20px;
+        }
+
+        .workflow-step {
+            grid-template-columns: 50px 1fr;
+            padding: 18px;
+            gap: 15px;
+        }
+
+        .workflow-number {
+            width: 45px;
+            height: 45px;
+        }
+
+        .technology {
+            padding: 28px 22px;
+        }
+
+        .technology h2 {
+            font-size: 26px;
+        }
+    }
+</style>
+
+<!-- ================= HERO ================= -->
+
+<section class="about-hero">
+
+```
+<div class="about-hero-content">
+
+    <span class="about-label">
+        ABOUT PUBLIC GRIEVANCE AI
+    </span>
+
+    <h1>
+        AI-Based Public Grievance
+        <br>
+        <span>Analysis System</span>
+    </h1>
+
+    <p>
+        Public Grievance AI is a Deep Learning-based platform
+        designed to help citizens submit public complaints and
+        enable administrators to analyze, prioritize, monitor
+        and resolve grievances through a centralized system.
+    </p>
+
+</div>
+
+
+<div class="about-badge">
+    AI
+    <small>LSTM</small>
+</div>
+```
+
+</section>
+
+<!-- ================= CONTENT ================= -->
+
+<section class="about-content">
+
+```
+<!-- MISSION -->
+
+<div class="mission">
+
+    <div class="mission-header">
+
+        <div class="mission-icon">
+            ✦
+        </div>
+
+        <h2>Our Mission</h2>
+
+    </div>
+
+    <p>
+        Our mission is to make public grievance management more
+        organized, transparent and accessible. The system combines
+        Natural Language Processing and an LSTM Deep Learning model
+        to analyze complaint text and provide useful information
+        such as sentiment, category, priority and prediction
+        confidence. This helps administrators understand complaints
+        and manage them more efficiently.
+    </p>
+
+</div>
+
+
+<!-- PLATFORM CAPABILITIES -->
+
+<div class="section-heading">
+
+    <small>PLATFORM CAPABILITIES</small>
+
+    <h2>Built for citizens and administrators</h2>
+
+    <p>
+        The platform provides separate features for citizens and
+        administrators while using AI to support complaint analysis.
+    </p>
+
+</div>
+
+
+<div class="about-grid">
+
+    <article class="about-card">
+
+        <span class="card-number">01 / CITIZEN</span>
+
+        <h3>Citizen Friendly</h3>
+
+        <p>
+            Citizens can register, login, submit public complaints,
+            view AI analysis results and track the progress of their
+            complaints through their dashboard.
+        </p>
+
+    </article>
+
+
+    <article class="about-card">
+
+        <span class="card-number">02 / ARTIFICIAL INTELLIGENCE</span>
+
+        <h3>AI-Powered Analysis</h3>
+
+        <p>
+            NLP preprocessing and an LSTM Deep Learning model analyze
+            complaint text, classify sentiment and provide a model
+            confidence score.
+        </p>
+
+    </article>
+
+
+    <article class="about-card">
+
+        <span class="card-number">03 / ADMINISTRATION</span>
+
+        <h3>Admin Management</h3>
+
+        <p>
+            Administrators can review complaints, identify
+            high-priority issues, update complaint status and
+            monitor grievance-related information.
+        </p>
+
+    </article>
+
+</div>
+
+
+<!-- ================= WORKFLOW ================= -->
+
+<div class="workflow-section">
+
+    <div class="section-heading">
+
+        <small>WORKFLOW</small>
+
+        <h2>How Public Grievance AI Works</h2>
+
+        <p>
+            The system follows a simple workflow from complaint
+            registration to resolution and notification.
+        </p>
+
+    </div>
+
+
+    <div class="workflow">
+
+        <div class="workflow-step">
+
+            <div class="workflow-number">
+                01
+            </div>
+
+            <div>
+                <h3>Register & Login</h3>
+
+                <p>
+                    Users create an account and securely access
+                    the public grievance portal.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-number">
+                02
+            </div>
+
+            <div>
+                <h3>Submit Complaint</h3>
+
+                <p>
+                    The citizen describes the public issue and
+                    submits the relevant complaint details.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-number">
+                03
+            </div>
+
+            <div>
+                <h3>AI Analysis</h3>
+
+                <p>
+                    NLP preprocessing prepares the complaint text
+                    and the LSTM model predicts its sentiment.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-number">
+                04
+            </div>
+
+            <div>
+                <h3>Category & Priority</h3>
+
+                <p>
+                    The system identifies the complaint category
+                    and determines an appropriate priority level.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-number">
+                05
+            </div>
+
+            <div>
+                <h3>Admin Review & Resolution</h3>
+
+                <p>
+                    Administrators review the complaint, update
+                    its status and add a solution or remark.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-number">
+                06
+            </div>
+
+            <div>
+                <h3>Notify & Track</h3>
+
+                <p>
+                    Users can track complaint progress and receive
+                    email notifications for important updates.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TECHNOLOGY ================= -->
+
+<div class="technology">
+
+    <div>
+
+        <small>DEEP LEARNING TECHNOLOGY</small>
+
+        <h2>
+            Intelligence behind the platform
+        </h2>
+
+        <p>
+            Public Grievance AI uses Natural Language Processing
+            and an LSTM-based Deep Learning model to understand
+            complaint text and generate meaningful analysis.
+        </p>
+
+    </div>
+
+
+    <div class="tech-list">
+
+        <div class="tech-item">
+            <span class="tech-icon">✓</span>
+            Natural Language Processing
+        </div>
+
+        <div class="tech-item">
+            <span class="tech-icon">✓</span>
+            LSTM Deep Learning Model
+        </div>
+
+        <div class="tech-item">
+            <span class="tech-icon">✓</span>
+            Sentiment Classification
+        </div>
+
+        <div class="tech-item">
+            <span class="tech-icon">✓</span>
+            Complaint Category Detection
+        </div>
+
+        <div class="tech-item">
+            <span class="tech-icon">✓</span>
+            Priority Identification
+        </div>
+
+        <div class="tech-item">
+            <span class="tech-icon">✓</span>
+            Prediction Confidence Score
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CTA ================= -->
+
+<div class="about-cta">
+
+    <h2>
+        Have a public grievance?
+    </h2>
+
+    <p>
+        Create an account and submit your complaint through
+        the AI-powered grievance platform.
+    </p>
+
+    <a href="/register">
+        Get Started →
+    </a>
+
+</div>
+```
+
+</section>
+
+{% endblock %}

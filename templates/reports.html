@@ -1,0 +1,530 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .reports-page {
+        padding: 10px 0 60px;
+    }
+
+    /* Header */
+    .reports-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .reports-head small {
+        color: #6366f1;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+    }
+
+    .reports-head h1 {
+        margin: 7px 0;
+        color: #111827;
+        font-size: 38px;
+        line-height: 1.1;
+    }
+
+    .reports-head p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* Button */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 10px;
+        border: 0;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+        box-shadow: 0 7px 18px rgba(79,70,229,.18);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(79,70,229,.25);
+    }
+
+    /* Charts Grid */
+    .charts {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+    }
+
+    /* Chart Card */
+    .chartbox {
+        position: relative;
+        overflow: hidden;
+        min-height: 350px;
+        padding: 24px;
+        background: rgba(255,255,255,.97);
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        box-shadow: 0 12px 35px rgba(15,23,42,.06);
+    }
+
+    .chartbox::before {
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #eef2ff;
+        top: -65px;
+        right: -40px;
+        pointer-events: none;
+    }
+
+    .chartbox h3 {
+        position: relative;
+        margin: 0 0 20px;
+        color: #172033;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .chartbox h3::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 17px;
+        margin-right: 9px;
+        vertical-align: -3px;
+        border-radius: 5px;
+        background: linear-gradient(#4f46e5, #818cf8);
+    }
+
+    .chartbox canvas {
+        position: relative;
+        width: 100% !important;
+        max-height: 290px;
+    }
+
+    /* Wide Charts */
+    .chartbox.wide {
+        grid-column: span 2;
+        min-height: 390px;
+    }
+
+    .chartbox.wide canvas {
+        max-height: 320px;
+    }
+
+    /* Responsive */
+    @media (max-width: 850px) {
+        .reports-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .charts {
+            grid-template-columns: 1fr;
+        }
+
+        .chartbox,
+        .chartbox.wide {
+            grid-column: span 1;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .reports-head h1 {
+            font-size: 30px;
+        }
+
+        .chartbox {
+            padding: 18px;
+            min-height: 310px;
+        }
+
+        .chartbox.wide {
+            min-height: 330px;
+        }
+
+        .reports-head .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="reports-page">
+
+    <!-- HEADER -->
+    <div class="reports-head">
+
+        <div>
+            <small>INSIGHTS & ANALYTICS</small>
+
+            <h1>Reports & Charts</h1>
+
+            <p>
+                Visual analysis of public grievances and AI classifications.
+            </p>
+        </div>
+
+        <a class="btn" href="/admin/export/csv">
+            Download Full CSV
+        </a>
+
+    </div>
+
+
+    <!-- CHARTS -->
+    <div class="charts">
+
+        <!-- SENTIMENT -->
+        <section class="chartbox">
+
+            <h3>Sentiment Distribution</h3>
+
+            <canvas id="sentimentChart"></canvas>
+
+        </section>
+
+
+        <!-- PRIORITY -->
+        <section class="chartbox">
+
+            <h3>Priority Distribution</h3>
+
+            <canvas id="priorityChart"></canvas>
+
+        </section>
+
+
+        <!-- CATEGORY -->
+        <section class="chartbox wide">
+
+            <h3>Category-wise Complaints</h3>
+
+            <canvas id="categoryChart"></canvas>
+
+        </section>
+
+
+        <!-- STATUS -->
+        <section class="chartbox wide">
+
+            <h3>Status / Resolution Progress</h3>
+
+            <canvas id="statusChart"></canvas>
+
+        </section>
+
+
+        <!-- DAILY -->
+        <section class="chartbox wide">
+
+            <h3>Recent Complaint Volume</h3>
+
+            <canvas id="dailyChart"></canvas>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<script>
+const sentimentLabels = [
+    {% for x in sentiments %}
+        "{{ x.sentiment }}",
+    {% endfor %}
+];
+
+const sentimentData = [
+    {% for x in sentiments %}
+        {{ x.count }},
+    {% endfor %}
+];
+
+
+const priorityLabels = [
+    {% for x in priorities %}
+        "{{ x.priority }}",
+    {% endfor %}
+];
+
+const priorityData = [
+    {% for x in priorities %}
+        {{ x.count }},
+    {% endfor %}
+];
+
+
+const categoryLabels = [
+    {% for x in categories %}
+        "{{ x.category }}",
+    {% endfor %}
+];
+
+const categoryData = [
+    {% for x in categories %}
+        {{ x.count }},
+    {% endfor %}
+];
+
+
+const statusLabels = [
+    {% for x in statuses %}
+        "{{ x.status }}",
+    {% endfor %}
+];
+
+const statusData = [
+    {% for x in statuses %}
+        {{ x.count }},
+    {% endfor %}
+];
+
+
+const dailyLabels = [
+    {% for x in daily %}
+        "{{ x.day }}",
+    {% endfor %}
+];
+
+const dailyData = [
+    {% for x in daily %}
+        {{ x.count }},
+    {% endfor %}
+];
+
+
+/* Sentiment Chart */
+new Chart(document.getElementById("sentimentChart"), {
+    type: "doughnut",
+
+    data: {
+        labels: sentimentLabels,
+
+        datasets: [{
+            data: sentimentData,
+
+            borderWidth: 3,
+
+            hoverOffset: 8
+        }]
+    },
+
+    options: {
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        },
+
+        cutout: "62%"
+    }
+});
+
+
+/* Priority Chart */
+new Chart(document.getElementById("priorityChart"), {
+    type: "pie",
+
+    data: {
+        labels: priorityLabels,
+
+        datasets: [{
+            data: priorityData,
+
+            borderWidth: 3,
+
+            hoverOffset: 8
+        }]
+    },
+
+    options: {
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        }
+    }
+});
+
+
+/* Category Chart */
+new Chart(document.getElementById("categoryChart"), {
+
+    type: "bar",
+
+    data: {
+        labels: categoryLabels,
+
+        datasets: [{
+            label: "Complaints",
+            data: categoryData,
+
+            borderRadius: 7,
+
+            borderWidth: 0
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+
+        scales: {
+
+            y: {
+                beginAtZero: true,
+
+                ticks: {
+                    precision: 0
+                }
+            },
+
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+
+/* Status Chart */
+new Chart(document.getElementById("statusChart"), {
+
+    type: "bar",
+
+    data: {
+        labels: statusLabels,
+
+        datasets: [{
+            label: "Cases",
+            data: statusData,
+
+            borderRadius: 7,
+
+            borderWidth: 0
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+
+        scales: {
+
+            y: {
+                beginAtZero: true,
+
+                ticks: {
+                    precision: 0
+                }
+            },
+
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+
+
+/* Daily Complaint Chart */
+new Chart(document.getElementById("dailyChart"), {
+
+    type: "line",
+
+    data: {
+        labels: dailyLabels,
+
+        datasets: [{
+            label: "Complaints",
+            data: dailyData,
+
+            tension: 0.25,
+
+            fill: true,
+
+            pointRadius: 4,
+
+            pointHoverRadius: 6
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+            legend: {
+                display: true,
+                position: "bottom"
+            }
+        },
+
+        scales: {
+
+            y: {
+                beginAtZero: true,
+
+                ticks: {
+                    precision: 0
+                }
+            },
+
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}
+

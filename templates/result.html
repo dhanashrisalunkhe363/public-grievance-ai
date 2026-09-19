@@ -1,0 +1,777 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="result-page">
+
+
+<!-- Header -->
+<div class="head result-head">
+
+    <div>
+        <small>AI ANALYSIS COMPLETE</small>
+
+        <h1>
+            Complaint #{{ complaint_id }} Submitted
+        </h1>
+
+        <p>
+            Your complaint has been successfully added to the
+            official processing queue.
+        </p>
+    </div>
+
+    <a class="btn" href="/dashboard">
+        Go to Dashboard →
+    </a>
+
+</div>
+
+
+<!-- Success Banner -->
+<div class="success-banner">
+
+    <div class="success-icon">
+        ✓
+    </div>
+
+    <div>
+        <strong>Complaint submitted successfully</strong>
+        <p>
+            Your complaint has been analyzed by the AI system and is now
+            waiting for administrative review.
+        </p>
+    </div>
+
+</div>
+
+
+<!-- AI Result Cards -->
+<section class="result-grid">
+
+    <div class="result-card sentiment-card">
+        <div class="result-icon">◉</div>
+
+        <div>
+            <span>Sentiment</span>
+            <strong>{{ sentiment }}</strong>
+        </div>
+    </div>
+
+
+    <div class="result-card confidence-card">
+        <div class="result-icon">%</div>
+
+        <div>
+            <span>Confidence</span>
+            <strong>{{ confidence }}%</strong>
+        </div>
+    </div>
+
+
+    <div class="result-card category-card">
+        <div class="result-icon">◈</div>
+
+        <div>
+            <span>Category</span>
+            <strong>{{ category }}</strong>
+        </div>
+    </div>
+
+
+    <div class="result-card priority-card">
+        <div class="result-icon">⚡</div>
+
+        <div>
+            <span>Priority</span>
+            <strong>{{ priority }}</strong>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- Complaint Details -->
+<section class="panel complaint-panel">
+
+    <div class="panel-heading">
+
+        <div>
+            <small>SUBMITTED COMPLAINT</small>
+
+            <h2>Complaint Description</h2>
+        </div>
+
+        <span class="pending-badge">
+            Pending
+        </span>
+
+    </div>
+
+
+    <div class="complaint-box">
+        <p class="complaint-text">
+            {{ complaint }}
+        </p>
+    </div>
+
+
+    <!-- Next Step -->
+    <div class="notice next-step">
+
+        <div class="notice-icon">
+            ⏳
+        </div>
+
+        <div>
+            <strong>What happens next?</strong>
+
+            <p>
+                Your complaint is currently <b>Pending</b>.
+                An administrator will review and process it.
+                When the status changes, the latest process stage
+                will appear in your complaint timeline and notification center.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Process Timeline Preview -->
+    <div class="process-preview">
+
+        <div class="process-item active">
+            <div class="process-dot">✓</div>
+
+            <div>
+                <strong>Complaint Submitted</strong>
+                <small>Your complaint has been received.</small>
+            </div>
+        </div>
+
+
+        <div class="process-line"></div>
+
+
+        <div class="process-item">
+            <div class="process-dot">2</div>
+
+            <div>
+                <strong>Under Review</strong>
+                <small>Administrator will review your complaint.</small>
+            </div>
+        </div>
+
+
+        <div class="process-line"></div>
+
+
+        <div class="process-item">
+            <div class="process-dot">3</div>
+
+            <div>
+                <strong>Resolution</strong>
+                <small>Track the final status from your dashboard.</small>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="bottom-actions">
+
+        <a class="btn" href="/dashboard">
+            View My Complaints
+        </a>
+
+        <a class="btn outline" href="/complaint">
+            Submit Another Complaint
+        </a>
+
+    </div>
+
+</section>
+```
+
+</div>
+
+<style>
+
+/* =========================================
+   RESULT PAGE
+========================================= */
+
+.result-page {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.result-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 25px;
+
+    margin-bottom: 22px;
+}
+
+.result-head small {
+    color: #6366f1;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.result-head h1 {
+    margin: 7px 0 8px;
+
+    color: #111827;
+
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.result-head p {
+    margin: 0;
+
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   SUCCESS BANNER
+========================================= */
+
+.success-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    margin-bottom: 20px;
+    padding: 17px 19px;
+
+    background: linear-gradient(
+        135deg,
+        #eef2ff,
+        #f5f7ff
+    );
+
+    border: 1px solid #c7d2fe;
+    border-radius: 15px;
+}
+
+.success-icon {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    color: #4338ca;
+
+    border: 1px solid #c7d2fe;
+    border-radius: 12px;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.success-banner strong {
+    color: #312e81;
+    font-size: 14px;
+}
+
+.success-banner p {
+    margin: 4px 0 0;
+
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   RESULT GRID
+========================================= */
+
+.result-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+
+/* =========================================
+   RESULT CARD
+========================================= */
+
+.result-card {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    min-width: 0;
+
+    padding: 19px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 17px;
+
+    box-shadow:
+        0 8px 24px rgba(15, 23, 42, 0.05);
+
+    transition: all 0.2s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #c7d2fe;
+
+    box-shadow:
+        0 12px 28px rgba(79, 70, 229, 0.08);
+}
+
+
+/* =========================================
+   RESULT ICON
+========================================= */
+
+.result-icon {
+    width: 43px;
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef2ff;
+    color: #4f46e5;
+
+    border: 1px solid #c7d2fe;
+    border-radius: 12px;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.result-card span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.result-card strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: #1e293b;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   PANEL
+========================================= */
+
+.complaint-panel {
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 35px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================
+   PANEL HEADING
+========================================= */
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.panel-heading small {
+    color: #6366f1;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.panel-heading h2 {
+    margin: 5px 0 0;
+
+    color: #111827;
+
+    font-size: 21px;
+    font-weight: 800;
+}
+
+
+/* =========================================
+   PENDING BADGE
+========================================= */
+
+.pending-badge {
+    padding: 7px 13px;
+
+    background: #fff7ed;
+    color: #c2410c;
+
+    border: 1px solid #fed7aa;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+/* =========================================
+   COMPLAINT BOX
+========================================= */
+
+.complaint-box {
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+
+.complaint-text {
+    margin: 0;
+
+    color: #334155;
+
+    font-size: 14px;
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+
+/* =========================================
+   NEXT STEP NOTICE
+========================================= */
+
+.next-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+
+    margin-top: 20px;
+    padding: 17px;
+
+    background: #f5f7ff;
+
+    border: 1px solid #c7d2fe;
+    border-radius: 14px;
+}
+
+.notice-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+
+    font-size: 17px;
+}
+
+.next-step strong {
+    color: #312e81;
+    font-size: 13px;
+}
+
+.next-step p {
+    margin: 5px 0 0;
+
+    color: #475569;
+
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+
+/* =========================================
+   PROCESS PREVIEW
+========================================= */
+
+.process-preview {
+    display: flex;
+    align-items: center;
+
+    margin-top: 25px;
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+}
+
+.process-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    flex: 1;
+}
+
+.process-dot {
+    width: 32px;
+    height: 32px;
+
+    flex: 0 0 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e2e8f0;
+    color: #64748b;
+
+    border-radius: 50%;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.process-item.active .process-dot {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.process-item strong {
+    display: block;
+
+    color: #334155;
+
+    font-size: 11px;
+}
+
+.process-item small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+.process-line {
+    height: 1px;
+
+    width: 35px;
+
+    margin: 0 8px;
+
+    background: #cbd5e1;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.bottom-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    margin-top: 24px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+
+    padding: 10px 17px;
+
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #3730a3
+    );
+
+    color: #ffffff;
+
+    border: 0;
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(79, 70, 229, 0.22);
+}
+
+.btn.outline {
+    background: #ffffff;
+
+    color: #3730a3;
+
+    border: 1px solid #c7d2fe;
+}
+
+.btn.outline:hover {
+    background: #eef2ff;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .result-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .process-preview {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .process-item {
+        width: 100%;
+    }
+
+    .process-line {
+        width: 1px;
+        height: 18px;
+        margin-left: 15px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .result-head {
+        flex-direction: column;
+    }
+
+    .result-head h1 {
+        font-size: 27px;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .complaint-panel {
+        padding: 19px;
+        border-radius: 17px;
+    }
+
+    .panel-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .bottom-actions {
+        flex-direction: column;
+    }
+
+    .bottom-actions .btn {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .success-banner {
+        align-items: flex-start;
+    }
+
+    .result-card {
+        padding: 16px;
+    }
+
+    .result-card strong {
+        font-size: 16px;
+    }
+
+    .complaint-box {
+        padding: 16px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
